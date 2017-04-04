@@ -10,6 +10,8 @@ convertToMilitaryTime <- function(timeStr) {
      if(is.na(timeStr)){
           return(NA)
      }
+     timeStr <- trimws(timeStr, which = "both")
+     timeStr <- unlist(strsplit(timeStr, " "))[1]
      tokens <- unlist(strsplit(timeStr, ":"))
      hour <- as.numeric(as.character(tokens[1]))
      if(hour <= 7) {
@@ -44,12 +46,15 @@ read.participant.files <- function(dataFolder, participantID) {
      participantFolder <- paste(dataFolder, participantFolder, "/", sep = "")
      
      # Reading task times - logs which contain where a task started/ended and it was during which visit.
-     taskTimesFileName <- dir(path = participantFolder, pattern = "^tasktimes.*$")
+     taskTimesFileName <- dir(path = participantFolder, pattern = "^.*times.*$")
      if(length(taskTimesFileName) == 0) {
-          stop("Participant has not task times file.") # If a participant does not have such log file, then there is no point considering him/her.
+          stop("Participant has no task times file.") # If a participant does not have such log file, then there is no point considering him/her.
      }
      taskTimes.df <- read.csv(file = paste(participantFolder, taskTimesFileName, sep = ""), header = F, colClasses = rep("character", 6))
      # In the following line, a few preprocessing steps are required so we can easily read and use the data provided in taskTimes file.
+     if(tolower(taskTimes.df$V1[1]) == 'task') {
+          taskTimes.df <- taskTimes.df[-1, ]
+     }
      colnames(taskTimes.df) <- c("task", "cosmed.start", "cosmed.end", "phone.start", "phone.end", "visit.date")
      taskTimes.df$start <- sapply(taskTimes.df$phone.start, FUN = convertToMilitaryTime)
      taskTimes.df$end <- sapply(taskTimes.df$phone.end, FUN = convertToMilitaryTime)

@@ -1,7 +1,7 @@
 # Parameters for constructing features -----------------------------------------------------------
 
 # Check 'participant_age.csv' file to see how our participant IDs look like.
-participantID <- "BAVA070" # This is the first participant in the file.
+participantID <- "HEAH055" # This is the first participant in the file.
 
 # This is the address of the folder in your computer where participants' accelerometer files are located.
 dataFolder <- "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Raw Data/Participant Data/"
@@ -10,7 +10,7 @@ dataFolder <- "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Da
 # The main script --------------------------------------------------------------------------------
 # construct features for each participant and saves into a Rdata file
 
-setwd("~/Workspaces/R workspace/Activity Recognition/f01")
+setwd("~/Workspaces/R workspace/Activity Recognition/pkg01_Data_Cleaning/")
 source("f02_ML_features_one_participant.R")
 
 
