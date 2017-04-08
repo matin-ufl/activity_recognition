@@ -44,4 +44,4 @@ bow.df <- BoW.oneParticipant(participantID = participantID,
                                          ppt.v1.df = data.files[[1]], ppt.v2.df = data.files[[2]], ppt.v3.df = data.files[[3]], ppt.v4.df = data.files[[4]],
                                          taskTimes.df = data.files[[5]])
 
-save(bow.df, file = paste(dataFolder, participantID, "_wrist_BoW.Rdata", sep = ""))
+save(bow.df, file = paste(dataFolder, "BOW_Files/", participantID, "_wrist_features.Rdata", sep = ""))
