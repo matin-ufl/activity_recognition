@@ -13,6 +13,9 @@ convertToMilitaryTime <- function(timeStr) {
      timeStr <- trimws(timeStr, which = "both")
      timeStr <- unlist(strsplit(timeStr, " "))[1]
      tokens <- unlist(strsplit(timeStr, ":"))
+     if(length(tokens) < 3) {
+          return(NA)
+     }
      hour <- as.numeric(as.character(tokens[1]))
      if(hour <= 7) {
           hour <- hour + 12
@@ -166,14 +169,15 @@ ML.features.oneParticipant <- function(participantID, cosmed.df, ppt.v1.df, ppt.
      # Constructing features #
      for(i in 1:nrow(taskTimes.df)){
           taskTimes.ppt.df <- taskTimes.df[i, ]
+          visit <- trimws(taskTimes.ppt.df$visit[1])
           taskDataFrame <- ppt.v1.df
           Task <- taskTimes.ppt.df$task[1]
           message(paste(participantID, Task, sep = " -- "))
-          if(taskTimes.ppt.df$visit[1] == 'V2') {
+          if(visit == 'V2') {
                taskDataFrame <- ppt.v2.df
-          } else if(taskTimes.ppt.df$visit[1] == 'V3') {
+          } else if(visit == 'V3') {
                taskDataFrame <- ppt.v3.df
-          } else if(taskTimes.ppt.df$visit[1] == 'V4') {
+          } else if(visit == 'V4') {
                taskDataFrame <- ppt.v4.df
           }
           process.status <- TRUE
