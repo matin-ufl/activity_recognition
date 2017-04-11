@@ -179,6 +179,8 @@ ML.features.oneParticipant <- function(participantID, cosmed.df, ppt.v1.df, ppt.
                taskDataFrame <- ppt.v3.df
           } else if(visit == 'V4') {
                taskDataFrame <- ppt.v4.df
+          } else if(visit == 'VH') {
+               next()
           }
           process.status <- TRUE
           start.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$start[1])

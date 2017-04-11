@@ -1,7 +1,7 @@
 # Parameters for constructing features -----------------------------------------------------------
 
 # Check 'participant_age.csv' file to see how our participant IDs look like.
-participantID <- "JOGA122" # This is the first participant in the file.
+participantID <- "JAJE025" # This is the first participant in the file.
 
 # This is the address of the folder in your computer where participants' accelerometer files are located.
 dataFolder <- "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Raw Data/Participant Data/"
@@ -42,3 +42,4 @@ feature.df <- ML.features.oneParticipant(participantID = participantID,
                                 epoch.length = (15 * 100))
 
 save(feature.df, file = paste(dataFolder, "ML_Features/", participantID, "_wrist_features.Rdata", sep = ""))
+rm(list = ls())

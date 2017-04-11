@@ -2,10 +2,10 @@
 # Getting a list of participant to use in on our studies.
 ###
 
-setwd("~/Workspaces/R workspace/Activity Recognition/f01/")
+setwd("~/Workspaces/R workspace/Activity Recognition/pkg01_Data_Cleaning/")
 
 library(readstata13)
-a <- read.dta13("~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Raw Data/cosmed_mets_tread_rmr_data-3.10.2017.dta")
+a <- read.dta13("~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Raw Data/cosmed_mets_tread_rmr_data-3.29.2017v2.dta")
 remove.idx <- which(a$bad_cosmed_data == 1)
 print(paste(length(remove.idx), "participants have bad_cosmed_data. REMOVED"))
 a <- a[-remove.idx, ]
