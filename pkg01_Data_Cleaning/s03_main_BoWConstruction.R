@@ -38,6 +38,10 @@ cosmed.df$task <- sapply(cosmed.df$activity, FUN = function(x) {
 # Loading visit files 
 data.files <- read.participant.files(dataFolder, participantID)
 
+# Checking if tasks have overlapping times 
+taskTimes.df <- data.files[[5]]
+print.overlapping.tasks(taskTimes.df)
+
 # Constructing features
 bow.df <- BoW.oneParticipant(participantID = participantID,
                                          cosmed.df = cosmed.df,

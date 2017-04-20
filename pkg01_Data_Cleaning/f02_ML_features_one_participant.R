@@ -215,4 +215,40 @@ ML.features.oneParticipant <- function(participantID, cosmed.df, ppt.v1.df, ppt.
      result
 }
 
+# Converts a time string (hh:mm:ss) to a numeric value => seconds passed midnight.
+# This is a private function used for overlapping tasks check.
+p_convert.timeToNumber <- function(timeStr) {
+     tokens <- unlist(strsplit(timeStr, split = ":"))
+     result <- NA_real_
+     if(length(tokens) == 3) {
+          result <- as.numeric(as.character(tokens[1])) * 3600 +
+               as.numeric(as.character(tokens[2])) * 60 +
+               as.numeric(as.character(tokens[3]))
+     }
+     result
+}
 
+# Check for overlapping tasks
+# Input:
+#      1. taskTimes.df: a data.frame having the following columns:
+#          1. Task
+#          2. start.time: (str) hh:mm:ss
+#          3. end.time:   (str) hh:mm:ss
+#          4. Visit
+# There is no output.
+# But this function prints the tasks which have overlapping times.
+print.overlapping.tasks <- function(taskTimes.df) {
+     taskTimes.df$visit <- trimws(taskTimes.df$visit)
+     for(v in levels(as.factor(trimws(taskTimes.df$visit)))) {
+          visit.df <- taskTimes.df[taskTimes.df$visit == v, ]
+          visit.df$s <- sapply(visit.df$start, FUN = p_convert.timeToNumber)
+          visit.df$f <- sapply(visit.df$end, FUN = p_convert.timeToNumber)
+          for(i in 1:(nrow(visit.df) - 1)) {
+               for(j in (i + 1):nrow(visit.df)) {
+                    if (max(visit.df$s[i], visit.df$s[j]) <= min(visit.df$f[i], visit.df$f[j])) {
+                         print(paste("Tasks (", visit.df$task[i], ") and (", visit.df$task[j], ") have overlapping times!", sep = ""))
+                    }
+               }
+          }
+     }
+}

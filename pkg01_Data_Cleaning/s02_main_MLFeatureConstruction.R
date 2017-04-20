@@ -1,7 +1,7 @@
 # Parameters for constructing features -----------------------------------------------------------
 
 # Check 'participant_age.csv' file to see how our participant IDs look like.
-participantID <- "JAJE025" # This is the first participant in the file.
+participantID <- "HEAH055" # This is the first participant in the file.
 
 # This is the address of the folder in your computer where participants' accelerometer files are located.
 dataFolder <- "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Raw Data/Participant Data/"
@@ -33,6 +33,10 @@ cosmed.df$task <- sapply(cosmed.df$activity, FUN = function(x) {
 
 # Loading visit files 
 data.files <- read.participant.files(dataFolder, participantID)
+
+# Checking if tasks have overlapping times 
+taskTimes.df <- data.files[[5]]
+print.overlapping.tasks(taskTimes.df)
 
 # Constructing features
 feature.df <- ML.features.oneParticipant(participantID = participantID,
