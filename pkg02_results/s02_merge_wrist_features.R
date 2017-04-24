@@ -42,7 +42,7 @@ for(ppt in levels(as.factor(wrist.df$PID))) {
      }
 }
 rm(ppt, task, temp, ppt.task.df, ppt.df)
-save(activityRecognition.df, file = "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Cleaned Data/wrist_features_042117.Rdata")
+save(activityRecognition.df, file = "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Cleaned Data/wrist_features_042417.Rdata")
 
 # Getting a summary of the tasks (for a table in the manuscript)
 for(task in levels(as.factor(activityRecognition.df$Task))) {

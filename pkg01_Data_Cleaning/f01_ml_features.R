@@ -80,12 +80,12 @@ sdvm <- function(VM) {
 }
 
 # All the ML features for one epoch
-ml.features.oneEpoch <- function(PID, Task, start.time, end.time, x.axis, VM, sample.rate = 100) {
+ml.features.oneEpoch <- function(PID, Task, start.time, end.time, y.axis, VM, sample.rate = 100) {
      options(warn = -1)
      feature1 <- mvm(VM)
      feature2 <- sdvm(VM)
-     feature3 <- mangle(x.axis, VM)
-     feature4 <- sdangle(x.axis, VM)
+     feature3 <- mangle(y.axis, VM)
+     feature4 <- sdangle(y.axis, VM)
      feature5 <- p625(VM, sample.rate)
      feature6 <- df(VM, sample.rate)
      feature7 <- fpdf(VM, sample.rate)
@@ -126,7 +126,7 @@ ml.featureConstruction <- function(PID, Task, METs, taskDataFrame, start.idx, en
      }
      for(i in seq(start.idx, end.idx, by = epoch.length)) {
           last.idx <- min(nrow(taskDataFrame), (i + epoch.length - 1))
-          curResult <- ml.features.oneEpoch(PID, Task, taskDataFrame$timeOnly[i], taskDataFrame$timeOnly[last.idx], taskDataFrame$X[i:last.idx], taskDataFrame$VM[i:last.idx], 100)
+          curResult <- ml.features.oneEpoch(PID, Task, taskDataFrame$timeOnly[i], taskDataFrame$timeOnly[last.idx], taskDataFrame$Y[i:last.idx], taskDataFrame$VM[i:last.idx], 100)
           curResult$MET <- METs
           options(warn = -1)
           if(!is.na(curResult)) {
