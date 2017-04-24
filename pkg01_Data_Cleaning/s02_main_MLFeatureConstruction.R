@@ -1,7 +1,7 @@
 # Parameters for constructing features -----------------------------------------------------------
 
 # Check 'participant_age.csv' file to see how our participant IDs look like.
-participantID <- "HEAH055" # This is the first participant in the file.
+participantID <- "TALI002" # This is the first participant in the file.
 
 # This is the address of the folder in your computer where participants' accelerometer files are located.
 dataFolder <- "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Raw Data/Participant Data/"

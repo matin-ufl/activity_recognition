@@ -101,33 +101,38 @@ BoW.oneParticipant <- function(participantID, cosmed.df, ppt.v1.df, ppt.v2.df, p
           } else if(taskTimes.ppt.df$visit[1] == 'V4') {
                taskDataFrame <- ppt.v4.df
           }
-          process.status <- TRUE
-          start.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$start[1])
-          if(length(start.idx) == 0) {
-               warning(paste("No start time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
-               process.status <- FALSE
-               next
+          if(is.na(taskDataFrame)) {
+               message(paste("Skipping ", participantID, "-", Task, " (", visit, "). Since there is no visit file.", sep = ""))
+               next()
           } else {
-               start.idx <- min(start.idx)
-          }
-          end.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$end[1])
-          if(length(end.idx) == 0) {
-               warning(paste("No end time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
-               process.status <- FALSE
-               next
-          } else {
-               end.idx <- max(end.idx)
-          }
-          if(process.status) {
-               METs <- NA
-               MET.idx <- which(ppt.cosmed.df$task == Task)
-               if(length(MET.idx) > 0) {
-                    METs <- ppt.cosmed.df$METs[MET.idx]
+               process.status <- TRUE
+               start.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$start[1])
+               if(length(start.idx) == 0) {
+                    warning(paste("No start time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
+                    process.status <- FALSE
+                    next
+               } else {
+                    start.idx <- min(start.idx)
                }
-               
-               feature.df <- BoW.construction(PID = participantID, Task = taskTimes.ppt.df$task[1], METs, taskDataFrame, start.idx, end.idx, threshold = 3, word.dictionary = word.dictionary)
-               if(nrow(feature.df) > 0) {
-                    result <- rbind(result, feature.df)
+               end.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$end[1])
+               if(length(end.idx) == 0) {
+                    warning(paste("No end time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
+                    process.status <- FALSE
+                    next
+               } else {
+                    end.idx <- max(end.idx)
+               }
+               if(process.status) {
+                    METs <- NA
+                    MET.idx <- which(ppt.cosmed.df$task == Task)
+                    if(length(MET.idx) > 0) {
+                         METs <- ppt.cosmed.df$METs[MET.idx]
+                    }
+                    
+                    feature.df <- BoW.construction(PID = participantID, Task = taskTimes.ppt.df$task[1], METs, taskDataFrame, start.idx, end.idx, threshold = 3, word.dictionary = word.dictionary)
+                    if(nrow(feature.df) > 0) {
+                         result <- rbind(result, feature.df)
+                    }
                }
           }
      }

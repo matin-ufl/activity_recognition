@@ -160,7 +160,7 @@ read.participant.files <- function(dataFolder, participantID) {
 #     1. returns a data.frame which contains feature vectors for each <Participant, Task, Epoch>.
 ML.features.oneParticipant <- function(participantID, cosmed.df, ppt.v1.df, ppt.v2.df, ppt.v3.df, ppt.v4.df, taskTimes.df, epoch.length = (15 * 100)) {
      message(paste("Constructing features for", participantID, " started."))
-
+     
      result <- data.frame(matrix(nrow = 0, ncol = 12))
      
      # Selecting the part of cosmed.df dataframe which is related to the current participant.
@@ -182,33 +182,38 @@ ML.features.oneParticipant <- function(participantID, cosmed.df, ppt.v1.df, ppt.
           } else if(visit == 'VH') {
                next()
           }
-          process.status <- TRUE
-          start.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$start[1])
-          if(length(start.idx) == 0) {
-               warning(paste("No start time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
-               process.status <- FALSE
-               next
+          if(is.na(taskDataFrame)) {
+               message(paste("Skipping ", participantID, "-", Task, " (", visit, "). Since there is no visit file.", sep = ""))
+               next()
           } else {
-               start.idx <- min(start.idx)
-          }
-          end.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$end[1])
-          if(length(end.idx) == 0) {
-               warning(paste("No end time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
-               process.status <- FALSE
-               next
-          } else {
-               end.idx <- max(end.idx)
-          }
-          if(process.status) {
-               METs <- NA
-               MET.idx <- which(ppt.cosmed.df$task == Task)
-               if(length(MET.idx) > 0) {
-                    METs <- ppt.cosmed.df$METs[MET.idx]
+               process.status <- TRUE
+               start.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$start[1])
+               if(length(start.idx) == 0) {
+                    warning(paste("No start time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
+                    process.status <- FALSE
+                    next
+               } else {
+                    start.idx <- min(start.idx)
                }
-               
-               feature.df <- ml.featureConstruction(PID = participantID, Task = taskTimes.ppt.df$task[1], METs, taskDataFrame, start.idx, end.idx, epoch.length)
-               if(nrow(feature.df) > 0) {
-                    result <- rbind(result, feature.df)
+               end.idx <- which(taskDataFrame$timeOnly == taskTimes.ppt.df$end[1])
+               if(length(end.idx) == 0) {
+                    warning(paste("No end time found for participant (", participantID, ") and task (", Task, ")", sep = ""))
+                    process.status <- FALSE
+                    next
+               } else {
+                    end.idx <- max(end.idx)
+               }
+               if(process.status) {
+                    METs <- NA
+                    MET.idx <- which(ppt.cosmed.df$task == Task)
+                    if(length(MET.idx) > 0) {
+                         METs <- ppt.cosmed.df$METs[MET.idx]
+                    }
+                    
+                    feature.df <- ml.featureConstruction(PID = participantID, Task = taskTimes.ppt.df$task[1], METs, taskDataFrame, start.idx, end.idx, epoch.length)
+                    if(nrow(feature.df) > 0) {
+                         result <- rbind(result, feature.df)
+                    }
                }
           }
      }
