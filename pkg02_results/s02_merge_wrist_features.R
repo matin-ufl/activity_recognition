@@ -42,6 +42,17 @@ for(ppt in levels(as.factor(wrist.df$PID))) {
      }
 }
 rm(ppt, task, temp, ppt.task.df, ppt.df)
+
+a <- levels(activityRecognition.df$Task)
+activityRecognition.df <- activityRecognition.df[activityRecognition.df$Task %in% a[1:33], ]
+activityRecognition.df$Task <- as.character(activityRecognition.df$Task)
+activityRecognition.df$Task <- as.factor(activityRecognition.df$Task)
+activityRecognition.df$class.locomotion <- "No"
+activityRecognition.df$class.locomotion[activityRecognition.df$Task %in% c("LEISURE WALK", "RAPID WALK", "WALKING AT RPE 1", "WALKING AT RPE 5", "STAIR ASCENT", "STAIR DESCENT")] <- "Yes"
+activityRecognition.df$class.sedentary <- "No"
+activityRecognition.df$class.sedentary[activityRecognition.df$Task %in% c("COMPUTER WORK", "TV WATCHING", "STANDING STILL")] <- "Yes"
+rm(a)
+
 save(activityRecognition.df, file = "~/Dropbox/Work-Research/Current Directory/Activity Recognition/Datasets/Cleaned Data/wrist_features_042417.Rdata")
 
 # Getting a summary of the tasks (for a table in the manuscript)
@@ -62,3 +73,4 @@ for(task in levels(as.factor(activityRecognition.df$Task))) {
 }
 
 
+b$Task <- as.character(b$Task)
